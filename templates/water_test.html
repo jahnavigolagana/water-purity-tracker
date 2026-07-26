@@ -1,0 +1,175 @@
+{% extends "layout.html" %}
+
+{% block title %}Water Test Entry - Water Purity Tracker{% endblock %}
+
+{% block content %}
+<div class="page-header-block">
+  <div>
+    <h1 class="page-title"><i class="fas fa-flask me-2 text-cyan"></i> New Water Quality Test Entry</h1>
+    <p class="page-subtitle">Enter chemistry lab titration & sensor measurements for AI rule processing</p>
+  </div>
+</div>
+
+<div class="row g-4">
+  <!-- Form Column -->
+  <div class="col-12 col-lg-8">
+    <div class="glass-card">
+      <form id="waterTestForm" class="needs-validation" novalidate>
+        
+        <h5 class="fw-bold text-white mb-3 border-bottom border-secondary border-opacity-25 pb-2">
+          <i class="fas fa-location-dot me-2 text-info"></i> Sample & Collector Metadata
+        </h5>
+
+        <div class="row g-3 mb-4">
+          <div class="col-12 col-md-6">
+            <label class="glass-label" for="inputDate"><i class="fas fa-calendar me-1"></i> Testing Date</label>
+            <input type="date" class="glass-input" id="inputDate" name="date" required value="2026-07-25">
+          </div>
+          <div class="col-12 col-md-6">
+            <label class="glass-label" for="inputTime"><i class="fas fa-clock me-1"></i> Sample Time</label>
+            <input type="time" class="glass-input" id="inputTime" name="time" required value="10:30">
+          </div>
+          <div class="col-12 col-md-6">
+            <label class="glass-label" for="inputBlock"><i class="fas fa-building me-1"></i> Hostel Block</label>
+            <select class="glass-select" id="inputBlock" name="hostel_block" required>
+              <option value="Block A - Boys">Block A - Boys Hostel</option>
+              <option value="Block B - Boys">Block B - Boys Hostel</option>
+              <option value="Block C - Girls">Block C - Girls Hostel</option>
+              <option value="Block D - PG">Block D - PG Hostel</option>
+              <option value="Mess Block">Mess / Dining Hall Sump</option>
+            </select>
+          </div>
+          <div class="col-12 col-md-6">
+            <label class="glass-label" for="inputTank"><i class="fas fa-faucet-drip me-1"></i> Tank / Source Name</label>
+            <input type="text" class="glass-input" id="inputTank" name="tank_name" placeholder="e.g., Overhead Tank 1" required value="Overhead Tank 1">
+          </div>
+          <div class="col-12">
+            <label class="glass-label" for="inputCollector"><i class="fas fa-user-gear me-1"></i> Water Collector / Staff Name</label>
+            <input type="text" class="glass-input" id="inputCollector" name="collector_name" placeholder="Full name of person collecting sample" required value="Ramesh Kumar">
+          </div>
+        </div>
+
+        <h5 class="fw-bold text-white mb-3 border-bottom border-secondary border-opacity-25 pb-2">
+          <i class="fas fa-vial me-2 text-warning"></i> Engineering Chemistry Parameters
+        </h5>
+
+        <div class="row g-3 mb-4">
+          <!-- pH Level -->
+          <div class="col-12 col-md-6">
+            <label class="glass-label" for="inputPh">
+              <i class="fas fa-atom me-1"></i> pH Level (Standard: 6.5 – 8.5)
+            </label>
+            <input type="number" step="0.1" min="0" max="14" class="glass-input" id="inputPh" name="ph" required value="7.2">
+            <div class="form-text text-muted extra-small">Range: 0.0 to 14.0</div>
+          </div>
+
+          <!-- TDS Level -->
+          <div class="col-12 col-md-6">
+            <label class="glass-label" for="inputTds">
+              <i class="fas fa-filter me-1"></i> TDS (Total Dissolved Solids - ppm)
+            </label>
+            <input type="number" min="0" max="3000" class="glass-input" id="inputTds" name="tds" required value="340">
+            <div class="form-text text-muted extra-small">Safe limit: ≤ 500 ppm</div>
+          </div>
+
+          <!-- Temperature -->
+          <div class="col-12 col-md-6">
+            <label class="glass-label" for="inputTemp">
+              <i class="fas fa-temperature-three-quarters me-1"></i> Water Temperature (°C)
+            </label>
+            <input type="number" step="0.1" min="0" max="100" class="glass-input" id="inputTemp" name="temperature" required value="26.5">
+            <div class="form-text text-muted extra-small">Optimal range: 20°C – 35°C</div>
+          </div>
+
+          <!-- Turbidity -->
+          <div class="col-12 col-md-6">
+            <label class="glass-label" for="inputTurbidity">
+              <i class="fas fa-eye-dropper me-1"></i> Turbidity (NTU)
+            </label>
+            <input type="number" step="0.1" min="0" max="100" class="glass-input" id="inputTurbidity" name="turbidity" required value="2.1">
+            <div class="form-text text-muted extra-small">Safe limit: ≤ 5.0 NTU</div>
+          </div>
+
+          <!-- Physical Observations -->
+          <div class="col-12 col-md-6">
+            <label class="glass-label" for="inputOdor"><i class="fas fa-wind me-1"></i> Odor</label>
+            <select class="glass-select" id="inputOdor" name="odor">
+              <option value="None / Odorless">None / Odorless</option>
+              <option value="Slight Chlorine">Slight Chlorine</option>
+              <option value="Earthy / Musty">Earthy / Musty</option>
+              <option value="Pungent">Pungent / Metallic</option>
+            </select>
+          </div>
+
+          <div class="col-12 col-md-6">
+            <label class="glass-label" for="inputColor"><i class="fas fa-palette me-1"></i> Water Color</label>
+            <select class="glass-select" id="inputColor" name="color">
+              <option value="Clear / Transparent">Clear / Transparent</option>
+              <option value="Slightly Yellowish">Slightly Yellowish</option>
+              <option value="Turbid / Brown">Turbid / Brownish</option>
+            </select>
+          </div>
+
+          <div class="col-12">
+            <label class="glass-label" for="inputRemarks"><i class="fas fa-comment-dots me-1"></i> General Observations / Remarks</label>
+            <textarea class="glass-input" id="inputRemarks" name="remarks" rows="2" placeholder="Optional notes regarding pipe line condition, weather, or recent tank cleaning..."></textarea>
+          </div>
+        </div>
+
+        <div class="d-flex gap-3 justify-content-end pt-3 border-top border-secondary border-opacity-25">
+          <button type="reset" class="btn-glass"><i class="fas fa-rotate-left me-1"></i> Reset</button>
+          <button type="submit" class="btn-ocean py-2 px-4">
+            <i class="fas fa-calculator me-1"></i> Run AI Analysis & Save to CSV
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Real-Time Interactive Live Score Preview Card -->
+  <div class="col-12 col-lg-4">
+    <div class="glass-card text-center position-sticky" style="top: 90px;">
+      <h5 class="fw-bold text-white mb-3"><i class="fas fa-brain me-2 text-cyan"></i> Real-Time AI Score Gauge</h5>
+      <p class="text-muted small mb-4">Calculates instant purity rating as parameters are typed</p>
+
+      <!-- Circular Score Gauge -->
+      <div class="circular-score-wrapper mb-3">
+        <svg class="circular-score-svg" viewBox="0 0 160 160">
+          <defs>
+            <linearGradient id="scoreGradSafe" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#10b981" />
+              <stop offset="100%" stop-color="#06b6d4" />
+            </linearGradient>
+            <linearGradient id="scoreGradUnsafe" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#ef4444" />
+              <stop offset="100%" stop-color="#f59e0b" />
+            </linearGradient>
+          </defs>
+          <circle class="circular-bg-track" cx="80" cy="80" r="70"></circle>
+          <circle class="circular-score-bar safe" id="liveScoreCircleBar" cx="80" cy="80" r="70"></circle>
+        </svg>
+        <div class="score-center-content">
+          <span class="score-number" id="liveScoreNumber">92</span>
+          <span class="score-label">Purity Index</span>
+        </div>
+      </div>
+
+      <div class="mb-4">
+        <span class="status-badge safe" id="liveStatusBadge">SAFE</span>
+      </div>
+
+      <div class="ai-recommendation-card p-3 rounded-3 text-start mb-3">
+        <div class="d-flex justify-content-between align-items-center mb-2">
+          <span class="fw-bold small text-cyan"><i class="fas fa-robot me-1"></i> AI Rule Diagnosis</span>
+          <span class="priority-chip low">Active Rule</span>
+        </div>
+        <p class="small text-light mb-0" id="liveRecommendationText">Water Safe - No Treatment Required</p>
+      </div>
+
+      <div class="alert alert-dark bg-opacity-50 border-secondary small text-muted text-start mb-0">
+        <i class="fas fa-info-circle me-1 text-info"></i> Upon saving, this entry is appended directly to <code>water_readings.csv</code> and alerts hostel admins if quality is UNSAFE.
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

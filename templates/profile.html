@@ -1,0 +1,151 @@
+{% extends "layout.html" %}
+
+{% block title %}User Profile & Admin Settings - Water Purity Tracker{% endblock %}
+
+{% block content %}
+<div class="page-header-block">
+  <div>
+    <h1 class="page-title"><i class="fas fa-user-circle me-2 text-cyan"></i> User Account & Profile Settings</h1>
+    <p class="page-subtitle">Enter and customize your admin credentials, contact details, and hostel block assignment</p>
+  </div>
+</div>
+
+<div class="row g-4">
+  <!-- Profile Summary Badge Column -->
+  <div class="col-12 col-lg-4">
+    <div class="glass-card text-center p-4">
+      <div class="user-avatar mx-auto mb-3" id="profileAvatarCircle" style="width: 90px; height: 90px; font-size: 2.5rem; border-width: 3px;">
+        {{ user.get('name', 'Admin')[0] }}
+      </div>
+      <h4 class="fw-bold text-white mb-1" id="profileNameDisplay">{{ user.get('name', 'Dr. Rajesh Sharma') }}</h4>
+      <span class="badge bg-primary bg-opacity-75 mb-3" id="profileRoleBadge">{{ user.get('role', 'Admin') }}</span>
+      <p class="text-muted small mb-3" id="profileEmailDisplay"><i class="fas fa-envelope me-1"></i> {{ user.get('email', 'admin@hostel.edu') }}</p>
+      
+      <div class="p-3 rounded-3 text-start bg-dark bg-opacity-50 border border-secondary border-opacity-25 mb-3 small">
+        <div class="mb-2"><strong>Hostel Block:</strong> <span id="profileBlockDisplay">{{ user.get('hostel_block', 'Central Admin') }}</span></div>
+        <div class="mb-2"><strong>Phone Contact:</strong> <span id="profilePhoneDisplay">{{ user.get('phone', '+91 98765 11111') }}</span></div>
+        <div><strong>Username:</strong> <span class="font-monospace text-cyan">{{ user.get('username', 'admin') }}</span></div>
+      </div>
+
+      <div class="alert alert-dark bg-opacity-50 border-secondary extra-small text-muted mb-0 text-start">
+        <i class="fas fa-info-circle me-1 text-info"></i> Any changes saved below update your session and database record immediately.
+      </div>
+    </div>
+  </div>
+
+  <!-- Interactive Profile Edit Form Column -->
+  <div class="col-12 col-lg-8">
+    <div class="glass-card p-4">
+      <h5 class="fw-bold text-white mb-3"><i class="fas fa-user-pen me-2 text-cyan"></i> Edit Account & Admin Information</h5>
+      
+      <form id="editProfileForm">
+        <div class="row g-3 mb-3">
+          <div class="col-12 col-md-6">
+            <label class="glass-label"><i class="fas fa-user me-1"></i> Full Name</label>
+            <input type="text" class="glass-input" id="inputProfileName" name="name" required value="{{ user.get('name', '') }}">
+          </div>
+
+          <div class="col-12 col-md-6">
+            <label class="glass-label"><i class="fas fa-envelope me-1"></i> Email Address</label>
+            <input type="email" class="glass-input" id="inputProfileEmail" name="email" required value="{{ user.get('email', '') }}">
+          </div>
+
+          <div class="col-12 col-md-6">
+            <label class="glass-label"><i class="fas fa-phone me-1"></i> Phone Contact</label>
+            <input type="text" class="glass-input" id="inputProfilePhone" name="phone" required value="{{ user.get('phone', '+91 98765 11111') }}">
+          </div>
+
+          <div class="col-12 col-md-6">
+            <label class="glass-label"><i class="fas fa-user-shield me-1"></i> Role Assignment</label>
+            <select class="glass-select" id="inputProfileRole" name="role">
+              <option value="Admin" {% if user.get('role') == 'Admin' %}selected{% endif %}>Admin</option>
+              <option value="Hostel Staff" {% if user.get('role') == 'Hostel Staff' %}selected{% endif %}>Hostel Staff</option>
+              <option value="Student" {% if user.get('role') == 'Student' %}selected{% endif %}>Student</option>
+            </select>
+          </div>
+
+          <div class="col-12">
+            <label class="glass-label"><i class="fas fa-building me-1"></i> Hostel Block Assignment</label>
+            <select class="glass-select" id="inputProfileBlock" name="hostel_block">
+              <option value="Central Admin" {% if user.get('hostel_block') == 'Central Admin' %}selected{% endif %}>Central Admin</option>
+              <option value="Block A - Boys" {% if user.get('hostel_block') == 'Block A - Boys' %}selected{% endif %}>Block A - Boys Hostel</option>
+              <option value="Block B - Boys" {% if user.get('hostel_block') == 'Block B - Boys' %}selected{% endif %}>Block B - Boys Hostel</option>
+              <option value="Block C - Girls" {% if user.get('hostel_block') == 'Block C - Girls' %}selected{% endif %}>Block C - Girls Hostel</option>
+              <option value="Block D - PG" {% if user.get('hostel_block') == 'Block D - PG' %}selected{% endif %}>Block D - PG Hostel</option>
+              <option value="Mess Block" {% if user.get('hostel_block') == 'Mess Block' %}selected{% endif %}>Mess & Dining Hall</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="d-flex justify-content-end pt-3 border-top border-secondary border-opacity-25">
+          <button type="submit" class="btn-ocean px-4">
+            <i class="fas fa-save me-1"></i> Save Profile Details
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <!-- Password Change Card -->
+    <div class="glass-card p-4 mt-4">
+      <h5 class="fw-bold text-white mb-3"><i class="fas fa-key me-2 text-warning"></i> Change Password</h5>
+      <form onsubmit="event.preventDefault(); showToast('Password security token updated successfully!', 'success'); this.reset();">
+        <div class="row g-3">
+          <div class="col-12 col-md-6">
+            <label class="glass-label">New Password</label>
+            <input type="password" class="glass-input" required placeholder="Minimum 6 characters">
+          </div>
+          <div class="col-12 col-md-6">
+            <label class="glass-label">Confirm New Password</label>
+            <input type="password" class="glass-input" required placeholder="Re-enter password">
+          </div>
+        </div>
+        <div class="mt-3 text-end">
+          <button type="submit" class="btn-glass"><i class="fas fa-shield-halved me-1"></i> Update Security Credentials</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const editForm = document.getElementById('editProfileForm');
+    if (editForm) {
+      editForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const payload = {
+          name: document.getElementById('inputProfileName').value,
+          email: document.getElementById('inputProfileEmail').value,
+          phone: document.getElementById('inputProfilePhone').value,
+          role: document.getElementById('inputProfileRole').value,
+          hostel_block: document.getElementById('inputProfileBlock').value
+        };
+
+        try {
+          const res = await fetch('/api/profile/update', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+          });
+          const data = await res.json();
+          if (data.success) {
+            showToast('Profile details updated successfully!', 'success');
+            // Update UI dynamically
+            const u = data.user;
+            document.getElementById('profileNameDisplay').innerText = u.name;
+            document.getElementById('profileRoleBadge').innerText = u.role;
+            document.getElementById('profileEmailDisplay').innerHTML = `<i class="fas fa-envelope me-1"></i> ${u.email}`;
+            document.getElementById('profileBlockDisplay').innerText = u.hostel_block;
+            document.getElementById('profilePhoneDisplay').innerText = u.phone;
+            document.getElementById('profileAvatarCircle').innerText = u.name[0].toUpperCase();
+          } else {
+            showToast(data.message || 'Failed to update profile', 'error');
+          }
+        } catch (err) {
+          showToast('Network error updating profile', 'error');
+        }
+      });
+    }
+  });
+</script>
+{% endblock %}

@@ -1,0 +1,29 @@
+Date,Time,Hostel Block,Tank,Collector,pH,TDS,Temperature,Turbidity,Purity Score,Status,Recommendation
+2026-07-25,08:30,Block A - Boys,Overhead Tank 1,Ramesh Kumar,7.2,340,26.5,2.1,92,SAFE,Water Safe - No Treatment Required
+2026-07-25,09:15,Block B - Boys,Underground Sump,Suresh Verma,6.2,580,27.0,6.5,58,UNSAFE,Reverse Osmosis & Neutralization & Sedimentation
+2026-07-25,10:00,Block C - Girls,RO Outlet - Mess,Ananya Sharma,7.4,180,24.0,0.8,98,SAFE,Water Safe - No Treatment Required
+2026-07-24,08:45,Block A - Boys,Overhead Tank 2,Ramesh Kumar,8.8,420,28.0,3.2,71,UNSAFE,Chemical balancing
+2026-07-24,11:30,Mess Block,Kitchen Main Supply,Priya Singh,7.0,290,25.5,1.5,95,SAFE,Water Safe - No Treatment Required
+2026-07-24,14:20,Block D - PG,Borewell Tank,Vikram Rao,6.4,650,31.0,7.8,45,UNSAFE,Reverse Osmosis & Neutralization & Multi-stage Sedimentation
+2026-07-23,09:00,Block B - Boys,Overhead Tank 1,Suresh Verma,7.1,310,26.0,1.9,94,SAFE,Water Safe - No Treatment Required
+2026-07-23,10:30,Block C - Girls,Overhead Tank 1,Ananya Sharma,7.6,240,25.0,1.2,96,SAFE,Water Safe - No Treatment Required
+2026-07-23,15:45,Mess Block,Drinking Cooler 1,Priya Singh,6.8,195,21.0,0.9,97,SAFE,Water Safe - No Treatment Required
+2026-07-22,08:15,Block A - Boys,Overhead Tank 1,Ramesh Kumar,7.3,355,27.2,2.4,90,SAFE,Water Safe - No Treatment Required
+2026-07-22,12:00,Block D - PG,Borewell Tank,Vikram Rao,8.9,720,36.5,8.4,32,UNSAFE,Reverse Osmosis & Acidification & UV Treatment & Cooling
+2026-07-22,16:30,Block C - Girls,RO Outlet - Mess,Ananya Sharma,7.5,175,23.5,0.7,99,SAFE,Water Safe - No Treatment Required
+2026-07-21,09:30,Block B - Boys,Underground Sump,Suresh Verma,6.3,510,28.5,4.8,68,UNSAFE,Reverse Osmosis & Neutralization
+2026-07-21,11:00,Block A - Boys,Overhead Tank 2,Ramesh Kumar,7.8,380,29.0,2.8,88,SAFE,Water Safe - No Treatment Required
+2026-07-21,14:15,Mess Block,Kitchen Main Supply,Priya Singh,7.1,280,26.0,1.4,95,SAFE,Water Safe - No Treatment Required
+2026-07-20,08:30,Block C - Girls,Overhead Tank 1,Ananya Sharma,7.4,260,25.2,1.1,96,SAFE,Water Safe - No Treatment Required
+2026-07-20,10:45,Block D - PG,Overhead Tank 1,Vikram Rao,6.1,490,27.8,5.9,62,UNSAFE,Neutralization & Sand Filtration
+2026-07-20,15:00,Block A - Boys,Drinking Water Point,Ramesh Kumar,7.3,210,23.8,1.0,97,SAFE,Water Safe - No Treatment Required
+2026-07-19,09:15,Block B - Boys,Overhead Tank 1,Suresh Verma,7.2,330,26.8,2.0,93,SAFE,Water Safe - No Treatment Required
+2026-07-19,13:30,Mess Block,Drinking Cooler 2,Priya Singh,6.9,205,22.0,0.8,98,SAFE,Water Safe - No Treatment Required
+2026-07-18,08:45,Block A - Boys,Overhead Tank 1,Ramesh Kumar,7.5,360,27.0,2.3,91,SAFE,Water Safe - No Treatment Required
+2026-07-18,11:15,Block C - Girls,Underground Sump,Ananya Sharma,5.9,610,30.0,6.2,50,UNSAFE,Reverse Osmosis & Neutralization & Multi-stage Sedimentation
+2026-07-17,10:00,Block D - PG,Borewell Tank,Vikram Rao,7.0,540,28.0,4.2,74,UNSAFE,Reverse Osmosis Treatment
+2026-07-17,14:45,Mess Block,Kitchen Main Supply,Priya Singh,7.3,275,25.0,1.3,96,SAFE,Water Safe - No Treatment Required
+2026-07-16,09:30,Block A - Boys,Overhead Tank 2,Ramesh Kumar,7.4,345,26.4,2.2,92,SAFE,Water Safe - No Treatment Required
+2026-07-25,10:30,Block A - Boys,Overhead Tank 1,Ramesh Kumar,7.2,340.0,26.5,2.1,90,SAFE,Water Safe - No Treatment Required
+2026-07-26,10:30,Block C - Girls,Overhead Tank 1,Jahanvi ,4.3,34.0,15.9,2.1,56,UNSAFE,Neutralization Filter
+2026-07-25,10:30,Block A - Boys,Overhead Tank 1,Ramesh Kumar,1.7,642.0,10.7,14.0,12,UNSAFE,Reverse Osmosis & Neutralization Filter & Multi-Stage Sedimentation & Sand Filtration + UV Disinfection

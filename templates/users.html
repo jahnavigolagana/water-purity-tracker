@@ -1,0 +1,168 @@
+{% extends "layout.html" %}
+
+{% block title %}User Management - Water Purity Tracker{% endblock %}
+
+{% block content %}
+<div class="page-header-block">
+  <div>
+    <h1 class="page-title"><i class="fas fa-users-gear me-2 text-cyan"></i> User Role Management</h1>
+    <p class="page-subtitle">Manage access privileges for hostel wardens, chemistry lab technicians, and staff</p>
+  </div>
+  <button class="btn-ocean" data-bs-toggle="modal" data-bs-target="#addUserModal">
+    <i class="fas fa-user-plus me-1"></i> Add New User / Admin
+  </button>
+</div>
+
+<div class="glass-card">
+  <div class="glass-table-container">
+    <table class="glass-table">
+      <thead>
+        <tr>
+          <th>User ID</th>
+          <th>Name & Email</th>
+          <th>Username</th>
+          <th>Role</th>
+          <th>Assigned Block</th>
+          <th>Phone Contact</th>
+          <th>Created Date</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for u in users %}
+        <tr>
+          <td><span class="font-monospace text-muted">#USR-00{{ u.id }}</span></td>
+          <td>
+            <div class="fw-bold text-white">{{ u.name }}</div>
+            <div class="small text-muted">{{ u.email }}</div>
+          </td>
+          <td><span class="font-monospace text-cyan small">{{ u.username }}</span></td>
+          <td>
+            <span class="badge {% if u.role == 'Admin' %}bg-primary{% elif u.role == 'Hostel Staff' %}bg-info{% else %}bg-secondary{% endif %}">
+              {{ u.role }}
+            </span>
+          </td>
+          <td>{{ u.hostel_block }}</td>
+          <td>{{ u.phone }}</td>
+          <td class="small text-muted">{{ u.created_at }}</td>
+          <td>
+            <button class="btn btn-sm btn-outline-danger" title="Delete User" onclick="deleteUserHandler({{ u.id }})">
+              <i class="fas fa-trash"></i>
+            </button>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Modal: Add New User -->
+<div class="modal fade" id="addUserModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content glass-card border-secondary text-white">
+      <div class="modal-header border-secondary border-opacity-25">
+        <h5 class="modal-title fw-bold"><i class="fas fa-user-plus me-2 text-cyan"></i> Add New User Account</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <form id="addUserForm">
+          <div class="mb-3">
+            <label class="glass-label">Full Name</label>
+            <input type="text" class="glass-input" id="addName" required placeholder="e.g. Dr. Anish Kumar">
+          </div>
+          <div class="row g-2 mb-3">
+            <div class="col-6">
+              <label class="glass-label">Username</label>
+              <input type="text" class="glass-input" id="addUsername" required placeholder="e.g. anish_admin">
+            </div>
+            <div class="col-6">
+              <label class="glass-label">Email Address</label>
+              <input type="email" class="glass-input" id="addEmail" required placeholder="anish@hostel.edu">
+            </div>
+          </div>
+          <div class="row g-2 mb-3">
+            <div class="col-6">
+              <label class="glass-label">Role Assignment</label>
+              <select class="glass-select" id="addRole">
+                <option value="Admin">Admin</option>
+                <option value="Hostel Staff">Hostel Staff</option>
+                <option value="Student">Student Representative</option>
+              </select>
+            </div>
+            <div class="col-6">
+              <label class="glass-label">Hostel Block</label>
+              <select class="glass-select" id="addBlock">
+                <option value="Central Admin">Central Admin</option>
+                <option value="Block A - Boys">Block A - Boys</option>
+                <option value="Block B - Boys">Block B - Boys</option>
+                <option value="Block C - Girls">Block C - Girls</option>
+                <option value="Block D - PG">Block D - PG</option>
+              </select>
+            </div>
+          </div>
+          <div class="mb-3">
+            <label class="glass-label">Password</label>
+            <input type="password" class="glass-input" id="addPassword" required placeholder="Set user password">
+          </div>
+          <div class="modal-footer border-secondary border-opacity-25 px-0 pb-0">
+            <button type="button" class="btn-glass" data-bs-dismiss="modal">Cancel</button>
+            <button type="submit" class="btn-ocean">Save & Create User</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const addForm = document.getElementById('addUserForm');
+    if (addForm) {
+      addForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const payload = {
+          name: document.getElementById('addName').value,
+          username: document.getElementById('addUsername').value,
+          email: document.getElementById('addEmail').value,
+          password: document.getElementById('addPassword').value,
+          role: document.getElementById('addRole').value,
+          hostel_block: document.getElementById('addBlock').value
+        };
+
+        try {
+          const res = await fetch('/api/users/add', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+          });
+          const data = await res.json();
+          if (data.success) {
+            showToast('New user account added successfully!', 'success');
+            bootstrap.Modal.getInstance(document.getElementById('addUserModal')).hide();
+            setTimeout(() => location.reload(), 600);
+          } else {
+            showToast(data.message || 'Error adding user', 'error');
+          }
+        } catch (err) {
+          showToast('Network error creating user', 'error');
+        }
+      });
+    }
+  });
+
+  async function deleteUserHandler(userId) {
+    if (!confirm('Are you sure you want to remove this user account?')) return;
+    try {
+      const res = await fetch(`/api/users/delete/${userId}`, { method: 'POST' });
+      const data = await res.json();
+      if (data.success) {
+        showToast('User account deleted', 'info');
+        setTimeout(() => location.reload(), 500);
+      }
+    } catch (err) {
+      showToast('Error deleting user', 'error');
+    }
+  }
+</script>
+{% endblock %}

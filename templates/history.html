@@ -1,0 +1,115 @@
+{% extends "layout.html" %}
+
+{% block title %}CSV History Log - Water Purity Tracker{% endblock %}
+
+{% block content %}
+<div class="page-header-block">
+  <div>
+    <h1 class="page-title"><i class="fas fa-history me-2 text-cyan"></i> Historical Water Testing Logs</h1>
+    <p class="page-subtitle">Search, filter, and inspect all records persisted inside <code>water_readings.csv</code></p>
+  </div>
+  <a href="{{ url_for('api_export_csv') }}" class="btn-ocean">
+    <i class="fas fa-download me-1"></i> Export Full CSV
+  </a>
+</div>
+
+<!-- Search & Filter Control Bar -->
+<div class="glass-card mb-4">
+  <form method="GET" action="{{ url_for('history_page') }}" class="row g-3 align-items-center">
+    <div class="col-12 col-md-4">
+      <div class="header-search w-100">
+        <i class="fas fa-search"></i>
+        <input type="text" name="search" placeholder="Search block, tank, collector..." value="{{ search }}">
+      </div>
+    </div>
+
+    <div class="col-6 col-md-3">
+      <select class="glass-select" name="block" onchange="this.form.submit()">
+        <option value="All" {% if block == 'All' %}selected{% endif %}>All Hostel Blocks</option>
+        <option value="Block A - Boys" {% if block == 'Block A - Boys' %}selected{% endif %}>Block A - Boys</option>
+        <option value="Block B - Boys" {% if block == 'Block B - Boys' %}selected{% endif %}>Block B - Boys</option>
+        <option value="Block C - Girls" {% if block == 'Block C - Girls' %}selected{% endif %}>Block C - Girls</option>
+        <option value="Block D - PG" {% if block == 'Block D - PG' %}selected{% endif %}>Block D - PG</option>
+        <option value="Mess Block" {% if block == 'Mess Block' %}selected{% endif %}>Mess Block</option>
+      </select>
+    </div>
+
+    <div class="col-6 col-md-3">
+      <select class="glass-select" name="status" onchange="this.form.submit()">
+        <option value="All" {% if status == 'All' %}selected{% endif %}>All Quality Statuses</option>
+        <option value="SAFE" {% if status == 'SAFE' %}selected{% endif %}>SAFE Only</option>
+        <option value="UNSAFE" {% if status == 'UNSAFE' %}selected{% endif %}>UNSAFE Only</option>
+      </select>
+    </div>
+
+    <div class="col-12 col-md-2">
+      <button type="submit" class="btn-glass w-100 justify-content-center">
+        <i class="fas fa-filter me-1"></i> Filter
+      </button>
+    </div>
+  </form>
+</div>
+
+<!-- Logged Readings Table -->
+<div class="glass-card">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <span class="text-muted small">Showing <strong>{{ readings|length }}</strong> matching records</span>
+    <span class="badge bg-secondary bg-opacity-50">CSV Persistence Engine</span>
+  </div>
+
+  <div class="glass-table-container">
+    <table class="glass-table">
+      <thead>
+        <tr>
+          <th>Date & Time</th>
+          <th>Hostel Block</th>
+          <th>Tank / Source</th>
+          <th>Collector</th>
+          <th>pH</th>
+          <th>TDS (ppm)</th>
+          <th>Temp (°C)</th>
+          <th>Turbidity (NTU)</th>
+          <th>Purity Score</th>
+          <th>Status</th>
+          <th>AI Treatment Recommendation</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for r in readings %}
+        <tr>
+          <td>
+            <div class="fw-semibold text-white">{{ r.Date }}</div>
+            <div class="text-muted extra-small">{{ r.Time }}</div>
+          </td>
+          <td>{{ r['Hostel Block'] }}</td>
+          <td>{{ r.Tank }}</td>
+          <td>{{ r.Collector }}</td>
+          <td><span class="fw-semibold {% if r.pH < 6.5 or r.pH > 8.5 %}text-warning{% endif %}">{{ r.pH }}</span></td>
+          <td><span class="fw-semibold {% if r.TDS > 500 %}text-danger{% endif %}">{{ r.TDS }}</span></td>
+          <td>{{ r.Temperature }}</td>
+          <td>{{ r.Turbidity }}</td>
+          <td>
+            <span class="fw-bold fs-6 {% if r['Purity Score'] >= 75 %}text-success{% else %}text-danger{% endif %}">
+              {{ r['Purity Score'] }}
+            </span>
+          </td>
+          <td>
+            <span class="status-badge {% if r.Status == 'SAFE' %}safe{% else %}unsafe{% endif %}">
+              {{ r.Status }}
+            </span>
+          </td>
+          <td class="text-muted small" style="max-width: 250px;">{{ r.Recommendation }}</td>
+        </tr>
+        {% else %}
+        <tr>
+          <td colspan="11" class="text-center py-4 text-muted">
+            <i class="fas fa-folder-open fs-2 d-block mb-2 text-secondary"></i>
+            No water testing records match the selected filter criteria.
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

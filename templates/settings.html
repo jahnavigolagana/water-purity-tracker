@@ -1,0 +1,58 @@
+{% extends "layout.html" %}
+
+{% block title %}System Settings - Water Purity Tracker{% endblock %}
+
+{% block content %}
+<div class="page-header-block">
+  <div>
+    <h1 class="page-title"><i class="fas fa-sliders me-2 text-cyan"></i> Application Preferences & Settings</h1>
+    <p class="page-subtitle">Configure theme UI, threshold limits, and notification behavior</p>
+  </div>
+</div>
+
+<div class="row g-4">
+  <div class="col-12 col-lg-6">
+    <div class="glass-card">
+      <h5 class="fw-bold text-white mb-3"><i class="fas fa-palette me-2 text-info"></i> Visual & Theme Preferences</h5>
+      <div class="d-flex justify-content-between align-items-center mb-4 pb-3 border-bottom border-secondary border-opacity-25">
+        <div>
+          <strong class="text-white">Dark / Light Mode Toggle</strong>
+          <div class="text-muted small">Switch between glass dark theme and light theme</div>
+        </div>
+        <div class="form-check form-switch fs-4">
+          <input class="form-check-input" type="checkbox" role="switch" id="settingsThemeSwitch" onchange="document.getElementById('themeToggleBtn').click()">
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <label class="glass-label">Interface Accent Theme</label>
+        <select class="glass-select" onchange="showToast('Theme accent updated', 'info')">
+          <option value="ocean">Deep Ocean Blue & Cyan (Default)</option>
+          <option value="emerald">Emerald Green Clean</option>
+          <option value="sapphire">Sapphire Neon Glass</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-12 col-lg-6">
+    <div class="glass-card">
+      <h5 class="fw-bold text-white mb-3"><i class="fas fa-bell me-2 text-warning"></i> Alert & Threshold Preferences</h5>
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <div>
+          <strong class="text-white">Automated Email Alerts</strong>
+          <div class="text-muted small">Send instant email when water is marked UNSAFE</div>
+        </div>
+        <div class="form-check form-switch fs-4">
+          <input class="form-check-input" type="checkbox" role="switch" checked>
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <label class="glass-label">TDS Critical Alert Threshold (ppm)</label>
+        <input type="number" class="glass-input" value="500">
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

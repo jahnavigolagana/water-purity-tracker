@@ -1,0 +1,231 @@
+{% extends "layout.html" %}
+
+{% block title %}Dashboard - Water Purity Tracker for Hostel{% endblock %}
+
+{% block content %}
+<!-- Page Title Block -->
+<div class="page-header-block">
+  <div>
+    <h1 class="page-title">Executive Dashboard</h1>
+    <p class="page-subtitle">Real-time Hostel Water Quality Monitoring & AI Intelligence Analytics</p>
+  </div>
+  <div class="d-flex gap-2">
+    <a href="{{ url_for('water_test_page') }}" class="btn-ocean">
+      <i class="fas fa-plus-circle"></i> Add Water Test
+    </a>
+    <a href="{{ url_for('api_export_csv') }}" class="btn-glass">
+      <i class="fas fa-file-csv"></i> Export CSV
+    </a>
+    <a href="{{ url_for('reports_page') }}" class="btn-glass">
+      <i class="fas fa-file-pdf"></i> Generate Report
+    </a>
+  </div>
+</div>
+
+<!-- Stat Cards Grid -->
+<div class="row g-3 mb-4">
+  <!-- Card 1: Overall Water Status -->
+  <div class="col-12 col-sm-6 col-xl-3">
+    <div class="glass-card stat-card">
+      <div class="stat-icon-wrapper {% if summary.overall_status == 'SAFE' %}green{% else %}red{% endif %}">
+        <i class="fas {% if summary.overall_status == 'SAFE' %}fa-shield-halved{% else %}fa-triangle-exclamation{% endif %}"></i>
+      </div>
+      <div class="stat-details">
+        <span class="stat-label">Overall Water Status</span>
+        <span class="stat-value">{{ summary.overall_status }}</span>
+        <span class="stat-trend positive">
+          <i class="fas fa-check-circle"></i> {{ summary.safe_percentage }}% Safe Pass Rate
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Card 2: Average Purity Score -->
+  <div class="col-12 col-sm-6 col-xl-3">
+    <div class="glass-card stat-card">
+      <div class="stat-icon-wrapper cyan">
+        <i class="fas fa-gauge-high"></i>
+      </div>
+      <div class="stat-details">
+        <span class="stat-label">Avg Purity Score</span>
+        <span class="stat-value">{{ summary.avg_score }}/100</span>
+        <span class="stat-trend positive">
+          <i class="fas fa-chart-line"></i> Optimal Quality Baseline
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Card 3: Avg pH Level -->
+  <div class="col-12 col-sm-6 col-xl-3">
+    <div class="glass-card stat-card">
+      <div class="stat-icon-wrapper blue">
+        <i class="fas fa-vial"></i>
+      </div>
+      <div class="stat-details">
+        <span class="stat-label">Avg pH Level</span>
+        <span class="stat-value">{{ summary.avg_ph }}</span>
+        <span class="stat-trend">Safe Std: 6.5 - 8.5</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Card 4: Avg TDS -->
+  <div class="col-12 col-sm-6 col-xl-3">
+    <div class="glass-card stat-card">
+      <div class="stat-icon-wrapper orange">
+        <i class="fas fa-filter text-warning"></i>
+      </div>
+      <div class="stat-details">
+        <span class="stat-label">Avg TDS</span>
+        <span class="stat-value">{{ summary.avg_tds }} <small class="fs-6">ppm</small></span>
+        <span class="stat-trend">Safe Std: < 500 ppm</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Secondary Stats Row -->
+<div class="row g-3 mb-4">
+  <div class="col-6 col-md-3">
+    <div class="glass-card p-3 d-flex align-items-center justify-content-between">
+      <div>
+        <div class="text-muted small">Total Tests Logged</div>
+        <div class="fs-3 fw-bold">{{ summary.total_tests }}</div>
+      </div>
+      <i class="fas fa-database fs-2 text-info opacity-50"></i>
+    </div>
+  </div>
+  <div class="col-6 col-md-3">
+    <div class="glass-card p-3 d-flex align-items-center justify-content-between">
+      <div>
+        <div class="text-muted small">Hostel Tanks Monitored</div>
+        <div class="fs-3 fw-bold">12</div>
+      </div>
+      <i class="fas fa-faucet-drip fs-2 text-primary opacity-50"></i>
+    </div>
+  </div>
+  <div class="col-6 col-md-3">
+    <div class="glass-card p-3 d-flex align-items-center justify-content-between">
+      <div>
+        <div class="text-muted small">Avg Turbidity</div>
+        <div class="fs-3 fw-bold">{{ summary.avg_turbidity }} NTU</div>
+      </div>
+      <i class="fas fa-eye-dropper fs-2 text-cyan opacity-50"></i>
+    </div>
+  </div>
+  <div class="col-6 col-md-3">
+    <div class="glass-card p-3 d-flex align-items-center justify-content-between">
+      <div>
+        <div class="text-muted small">Last Log Timestamp</div>
+        <div class="fs-6 fw-semibold text-truncate">{{ summary.last_updated }}</div>
+      </div>
+      <i class="fas fa-clock fs-2 text-success opacity-50"></i>
+    </div>
+  </div>
+</div>
+
+<!-- Charts Row -->
+<div class="row g-4 mb-4">
+  <!-- Daily Purity Score Trend Line Chart -->
+  <div class="col-12 col-lg-8">
+    <div class="glass-card h-100">
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <h5 class="fw-bold mb-0 text-white"><i class="fas fa-chart-area me-2 text-info"></i> Daily Water Purity Trend</h5>
+        <span class="badge bg-info bg-opacity-20 text-info">Past 7 Days</span>
+      </div>
+      <div style="height: 300px; position: relative;">
+        <canvas id="dailyTrendChart"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <!-- Safe vs Unsafe Water Pie Chart -->
+  <div class="col-12 col-lg-4">
+    <div class="glass-card h-100">
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <h5 class="fw-bold mb-0 text-white"><i class="fas fa-pie-chart me-2 text-success"></i> Quality Compliance</h5>
+      </div>
+      <div style="height: 250px; position: relative;">
+        <canvas id="safeUnsafePieChart"></canvas>
+      </div>
+      <div class="text-center mt-2">
+        <a href="{{ url_for('ai_suggestions_page') }}" class="btn btn-sm btn-outline-cyan w-100">
+          <i class="fas fa-robot me-1"></i> View AI Purification Advice
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Parameter Comparison Bar Chart Row -->
+<div class="row g-4 mb-4">
+  <div class="col-12">
+    <div class="glass-card">
+      <h5 class="fw-bold mb-3 text-white"><i class="fas fa-chart-column me-2 text-cyan"></i> Parameter Comparison Across Hostel Blocks</h5>
+      <div style="height: 280px; position: relative;">
+        <canvas id="parameterComparisonChart"></canvas>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Recent Water Testing Logs Table -->
+<div class="glass-card p-4">
+  <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+    <div>
+      <h5 class="fw-bold mb-0 text-white"><i class="fas fa-table-list me-2 text-primary"></i> Recent Water Quality Testing Logs</h5>
+      <p class="text-muted small mb-0">Automatically logged to <code>data/water_readings.csv</code></p>
+    </div>
+    <a href="{{ url_for('history_page') }}" class="btn-glass btn-sm">View Full History &rarr;</a>
+  </div>
+
+  <div class="glass-table-container">
+    <table class="glass-table">
+      <thead>
+        <tr>
+          <th>Date & Time</th>
+          <th>Hostel Block</th>
+          <th>Tank Name</th>
+          <th>pH</th>
+          <th>TDS (ppm)</th>
+          <th>Temp (°C)</th>
+          <th>Turbidity (NTU)</th>
+          <th>Purity Score</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for r in recent_readings %}
+        <tr>
+          <td>
+            <div class="fw-semibold">{{ r.Date }}</div>
+            <div class="text-muted extra-small">{{ r.Time }}</div>
+          </td>
+          <td>{{ r['Hostel Block'] }}</td>
+          <td>{{ r.Tank }}</td>
+          <td><span class="fw-semibold {% if r.pH < 6.5 or r.pH > 8.5 %}text-warning{% endif %}">{{ r.pH }}</span></td>
+          <td><span class="fw-semibold {% if r.TDS > 500 %}text-danger{% endif %}">{{ r.TDS }}</span></td>
+          <td>{{ r.Temperature }}</td>
+          <td>{{ r.Turbidity }}</td>
+          <td>
+            <div class="d-flex align-items-center gap-2">
+              <span class="fw-bold">{{ r['Purity Score'] }}</span>
+              <div class="progress flex-grow-1" style="height: 6px; background: rgba(255,255,255,0.1);">
+                <div class="progress-bar {% if r['Purity Score'] >= 75 %}bg-success{% else %}bg-danger{% endif %}" style="width: {{ r['Purity Score'] }}%;"></div>
+              </div>
+            </div>
+          </td>
+          <td>
+            <span class="status-badge {% if r.Status == 'SAFE' %}safe{% else %}unsafe{% endif %}">
+              <i class="fas {% if r.Status == 'SAFE' %}fa-check-circle{% else %}fa-circle-exclamation{% endif %} me-1"></i>
+              {{ r.Status }}
+            </span>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

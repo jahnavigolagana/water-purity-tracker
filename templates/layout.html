@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}Water Purity Tracker for Hostel{% endblock %}</title>
+
+  <!-- Google Fonts: Poppins -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Bootstrap 5 CSS CDN -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Font Awesome Icons CDN -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+
+  <!-- Custom Stylesheets -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/glassmorphism.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/backgrounds.css') }}">
+
+  {% block extra_head %}{% endblock %}
+</head>
+<body data-bg="{{ bg_type if bg_type else 'dashboard' }}">
+
+  <!-- Animated Dynamic Background Layer -->
+  <div class="bg-animated-layer">
+    {% if bg_type == 'auth' %}
+      <div class="bubble" style="left: 10%; width: 40px; height: 40px; animation-duration: 10s;"></div>
+      <div class="bubble" style="left: 30%; width: 60px; height: 60px; animation-duration: 14s; animation-delay: 2s;"></div>
+      <div class="bubble" style="left: 60%; width: 35px; height: 35px; animation-duration: 9s; animation-delay: 4s;"></div>
+      <div class="bubble" style="left: 85%; width: 50px; height: 50px; animation-duration: 12s; animation-delay: 1s;"></div>
+      <svg class="svg-wave-bottom" viewBox="0 0 1440 320">
+        <path d="M0,192L48,202.7C96,213,192,235,288,224C384,213,480,171,576,165.3C672,160,768,192,864,197.3C960,203,1056,181,1152,165.3C1248,149,1344,139,1392,133.3L1440,128L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path>
+      </svg>
+    {% elif bg_type == 'dashboard' %}
+      <div class="floating-circle circle-1"></div>
+      <div class="floating-circle circle-2"></div>
+    {% elif bg_type == 'analytics' %}
+      <div class="mesh-grid-pattern"></div>
+    {% elif bg_type == 'reports' %}
+      <div class="geo-shape shape-1"></div>
+      <div class="geo-shape shape-2"></div>
+    {% elif bg_type == 'water_test' %}
+      <div class="hex-lattice"></div>
+    {% elif bg_type == 'ai' %}
+      <div class="ai-grid-lines"></div>
+    {% elif bg_type == 'about' %}
+      <div class="ripple-circle ripple-1"></div>
+      <div class="ripple-circle ripple-2"></div>
+      <div class="ripple-circle ripple-3"></div>
+    {% endif %}
+  </div>
+
+  <!-- Loading Screen with Animated Water Drop -->
+  <div id="app-loading-overlay">
+    <div class="loader-water-drop"></div>
+    <div class="loader-text">WATER PURITY TRACKER</div>
+  </div>
+
+  {% if bg_type == 'auth' %}
+    <!-- Pure Auth Page without Sidebar -->
+    {% block auth_content %}{% endblock %}
+  {% else %}
+
+  <div class="app-wrapper">
+    <!-- Collapsible Sidebar -->
+    <aside class="app-sidebar" id="appSidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-logo-icon">
+          <i class="fas fa-droplet"></i>
+        </div>
+        <span class="sidebar-brand-name">AquaTrack SaaS</span>
+      </div>
+
+      <nav class="sidebar-menu">
+        <div class="menu-category">Main Navigation</div>
+        
+        <a href="{{ url_for('dashboard_page') }}" class="nav-link-custom {% if active_page == 'dashboard' %}active{% endif %}">
+          <i class="fas fa-chart-pie"></i>
+          <span class="nav-link-text">Dashboard</span>
+        </a>
+
+        <a href="{{ url_for('water_test_page') }}" class="nav-link-custom {% if active_page == 'water_test' %}active{% endif %}">
+          <i class="fas fa-flask"></i>
+          <span class="nav-link-text">Water Test</span>
+        </a>
+
+        <a href="{{ url_for('analysis_page') }}" class="nav-link-custom {% if active_page == 'analysis' %}active{% endif %}">
+          <i class="fas fa-microscope"></i>
+          <span class="nav-link-text">Water Analysis</span>
+        </a>
+
+        <a href="{{ url_for('ai_suggestions_page') }}" class="nav-link-custom {% if active_page == 'ai_suggestions' %}active{% endif %}">
+          <i class="fas fa-robot"></i>
+          <span class="nav-link-text">AI Suggestions</span>
+        </a>
+
+        <div class="menu-category">Analytics & Logs</div>
+
+        <a href="{{ url_for('reports_page') }}" class="nav-link-custom {% if active_page == 'reports' %}active{% endif %}">
+          <i class="fas fa-file-invoice"></i>
+          <span class="nav-link-text">Reports</span>
+        </a>
+
+        <a href="{{ url_for('history_page') }}" class="nav-link-custom {% if active_page == 'history' %}active{% endif %}">
+          <i class="fas fa-history"></i>
+          <span class="nav-link-text">History</span>
+        </a>
+
+        <a href="{{ url_for('analytics_page') }}" class="nav-link-custom {% if active_page == 'analytics' %}active{% endif %}">
+          <i class="fas fa-chart-line"></i>
+          <span class="nav-link-text">Analytics</span>
+        </a>
+
+        <a href="{{ url_for('alerts_page') }}" class="nav-link-custom {% if active_page == 'alerts' %}active{% endif %}">
+          <i class="fas fa-triangle-exclamation"></i>
+          <span class="nav-link-text">Alerts</span>
+        </a>
+
+        <div class="menu-category">Administration</div>
+
+        <a href="{{ url_for('users_page') }}" class="nav-link-custom {% if active_page == 'users' %}active{% endif %}">
+          <i class="fas fa-users-gear"></i>
+          <span class="nav-link-text">Users</span>
+        </a>
+
+        <a href="{{ url_for('profile_page') }}" class="nav-link-custom {% if active_page == 'profile' %}active{% endif %}">
+          <i class="fas fa-user-circle"></i>
+          <span class="nav-link-text">Profile</span>
+        </a>
+
+        <a href="{{ url_for('settings_page') }}" class="nav-link-custom {% if active_page == 'settings' %}active{% endif %}">
+          <i class="fas fa-sliders"></i>
+          <span class="nav-link-text">Settings</span>
+        </a>
+
+        <div class="menu-category">Info & Support</div>
+
+        <a href="{{ url_for('about_page') }}" class="nav-link-custom {% if active_page == 'about' %}active{% endif %}">
+          <i class="fas fa-circle-info"></i>
+          <span class="nav-link-text">About</span>
+        </a>
+
+        <a href="{{ url_for('help_page') }}" class="nav-link-custom {% if active_page == 'help' %}active{% endif %}">
+          <i class="fas fa-headset"></i>
+          <span class="nav-link-text">Help</span>
+        </a>
+
+        <a href="{{ url_for('logout') }}" class="nav-link-custom text-danger mt-3">
+          <i class="fas fa-right-from-bracket text-danger"></i>
+          <span class="nav-link-text text-danger">Logout</span>
+        </a>
+      </nav>
+    </aside>
+
+    <!-- Main Section -->
+    <main class="app-main-content">
+      <!-- Top Navigation Bar -->
+      <header class="app-header">
+        <div class="header-left">
+          <button class="sidebar-toggle-btn" id="sidebarToggleBtn" title="Toggle Sidebar">
+            <i class="fas fa-bars"></i>
+          </button>
+          <div class="header-search d-none d-md-block">
+            <i class="fas fa-search"></i>
+            <input type="text" placeholder="Search parameters, tanks, records...">
+          </div>
+        </div>
+
+        <div class="header-right">
+          <!-- Notification Bell -->
+          <a href="{{ url_for('alerts_page') }}" class="icon-badge-btn" title="System Alerts">
+            <i class="fas fa-bell"></i>
+            <span class="badge-count">2</span>
+          </a>
+
+          <!-- Dark / Light Theme Toggle -->
+          <button class="icon-badge-btn" id="themeToggleBtn" title="Toggle Theme">
+            <i class="fas fa-moon"></i>
+          </button>
+
+          <!-- User Profile Dropdown -->
+          <div class="user-profile-dropdown" onclick="window.location.href='{{ url_for('profile_page') }}'">
+            <div class="user-avatar">
+              {{ session.get('user', {}).get('name', 'Admin')[0] }}
+            </div>
+            <div class="user-info d-none d-sm-flex">
+              <span class="user-name">{{ session.get('user', {}).get('name', 'Dr. Rajesh Sharma') }}</span>
+              <span class="user-role">{{ session.get('user', {}).get('role', 'Admin') }}</span>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <!-- Content Body -->
+      <div class="content-body">
+        {% block content %}{% endblock %}
+      </div>
+
+      <!-- App Footer -->
+      <footer class="app-footer">
+        <div>&copy; 2026 Water Purity Tracker for Hostel &bull; Mini-Project Integration (Chemistry + IT Workshop + Python AI)</div>
+      </footer>
+    </main>
+  </div>
+
+  <!-- Scroll To Top Button -->
+  <button class="scroll-to-top-btn" id="scrollTopBtn" title="Scroll to Top">
+    <i class="fas fa-arrow-up"></i>
+  </button>
+
+  {% endif %}
+
+  <!-- Bootstrap 5 JS CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/bootstrap.bundle.min.js"></script>
+
+  <!-- Chart.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <!-- Custom Scripts -->
+  <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/charts.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/rule_engine.js') }}"></script>
+
+  {% block extra_scripts %}{% endblock %}
+</body>
+</html>

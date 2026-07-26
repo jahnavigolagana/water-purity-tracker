@@ -1,0 +1,2 @@
+/* Water Purity Tracker - Dashboard Specific Styles */
+.dashboard-card-hover { transition: transform 0.2s ease, box-shadow 0.2s ease; }

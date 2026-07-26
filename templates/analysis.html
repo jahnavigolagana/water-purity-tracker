@@ -1,0 +1,180 @@
+{% extends "layout.html" %}
+
+{% block title %}Water Quality Analysis - Water Purity Tracker{% endblock %}
+
+{% block content %}
+<div class="page-header-block">
+  <div>
+    <h1 class="page-title"><i class="fas fa-microscope me-2 text-cyan"></i> Chemistry Parameter Analysis</h1>
+    <p class="page-subtitle">Detailed engineering evaluation against WHO & IS 10500 safe drinking standards</p>
+  </div>
+  <a href="{{ url_for('water_test_page') }}" class="btn-ocean">
+    <i class="fas fa-plus me-1"></i> New Sample Analysis
+  </a>
+</div>
+
+<!-- Header Sample Context Card -->
+<div class="glass-card mb-4">
+  <div class="row align-items-center">
+    <div class="col-12 col-md-8">
+      <h4 class="fw-bold text-white mb-1">
+        Sample Location: <span class="text-cyan">{{ latest.get('Hostel Block', 'Block A - Boys') }}</span> &bull; {{ latest.get('Tank', 'Overhead Tank 1') }}
+      </h4>
+      <p class="text-muted small mb-0">
+        <i class="fas fa-calendar me-1"></i> Date: {{ latest.get('Date', '2026-07-25') }} {{ latest.get('Time', '08:30') }} | 
+        <i class="fas fa-user me-1"></i> Sample Collector: {{ latest.get('Collector', 'Ramesh Kumar') }}
+      </p>
+    </div>
+    <div class="col-12 col-md-4 text-md-end mt-3 mt-md-0">
+      <span class="status-badge {% if status == 'SAFE' %}safe{% else %}unsafe{% endif %} fs-6 px-3 py-2">
+        <i class="fas {% if status == 'SAFE' %}fa-check-circle{% else %}fa-exclamation-triangle{% endif %} me-1"></i>
+        OVERALL STATUS: {{ status }}
+      </span>
+    </div>
+  </div>
+</div>
+
+<div class="row g-4 mb-4">
+  <!-- Purity Gauge Column -->
+  <div class="col-12 col-lg-4">
+    <div class="glass-card text-center h-100 d-flex flex-column align-items-center justify-content-center p-4">
+      <h5 class="fw-bold text-white mb-3"><i class="fas fa-award text-warning me-2"></i> Computed Water Purity Score</h5>
+      
+      <div class="circular-score-wrapper my-3" style="width: 180px; height: 180px;">
+        <svg class="circular-score-svg" viewBox="0 0 160 160">
+          <circle class="circular-bg-track" cx="80" cy="80" r="70"></circle>
+          <circle class="circular-score-bar {% if status == 'SAFE' %}safe{% else %}unsafe{% endif %}" 
+                  cx="80" cy="80" r="70" 
+                  style="stroke-dashoffset: {{ 440 - (440 * score / 100) }};"></circle>
+        </svg>
+        <div class="score-center-content">
+          <span class="score-number" style="font-size: 2.5rem;">{{ score }}</span>
+          <span class="score-label">out of 100</span>
+        </div>
+      </div>
+
+      <div class="small text-muted px-2">
+        Purity index calculated via weighted chemical deviation algorithms across pH, TDS, Turbidity, & Temperature.
+      </div>
+    </div>
+  </div>
+
+  <!-- AI Treatment Recommendation Card -->
+  <div class="col-12 col-lg-8">
+    <div class="glass-card ai-recommendation-card h-100 p-4">
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <h5 class="fw-bold text-white mb-0">
+          <i class="fas fa-robot text-cyan me-2"></i> Python AI Rule Engine Diagnostic
+        </h5>
+        <span class="priority-chip {% if 'High' in ai_diag.priority %}high{% elif 'Medium' in ai_diag.priority %}medium{% else %}low{% endif %}">
+          {{ ai_diag.priority }}
+        </span>
+      </div>
+
+      <h4 class="text-info fw-bold mb-3">{{ ai_diag.summary }}</h4>
+
+      <div class="mb-3">
+        <strong class="text-light small text-uppercase tracking-wider">Expected Quality Outcome:</strong>
+        <p class="text-muted small mb-0">{{ ai_diag.expected_improvement }}</p>
+      </div>
+
+      {% if ai_diag.recommendations %}
+        <div class="mt-3">
+          <strong class="text-light small text-uppercase tracking-wider">Specific Water Treatment Protocol:</strong>
+          <div class="row g-2 mt-2">
+            {% for r in ai_diag.recommendations %}
+            <div class="col-12">
+              <div class="p-3 rounded-3" style="background: rgba(15, 23, 42, 0.7); border: 1px solid var(--border-glass);">
+                <div class="d-flex justify-content-between align-items-center">
+                  <span class="fw-bold text-cyan">{{ r.action }}</span>
+                  <span class="badge bg-secondary">Target: {{ r.parameter }}</span>
+                </div>
+                <div class="small text-muted mt-1">{{ r.details }}</div>
+              </div>
+            </div>
+            {% endfor %}
+          </div>
+        </div>
+      {% else %}
+        <div class="alert alert-success bg-opacity-20 border-success text-success mt-3 mb-0">
+          <i class="fas fa-circle-check me-2"></i> All water quality parameters fall strictly within safe hostel drinking limits. No chemical treatment or filtration servicing required.
+        </div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+<!-- Detailed Parameter Compliance Table -->
+<div class="glass-card">
+  <h5 class="fw-bold text-white mb-3">
+    <i class="fas fa-list-check text-cyan me-2"></i> Chemistry Standard Compliance Audit
+  </h5>
+
+  <div class="glass-table-container">
+    <table class="glass-table">
+      <thead>
+        <tr>
+          <th>Chemical Parameter</th>
+          <th>Entered Measurement</th>
+          <th>Safe Standard Baseline</th>
+          <th>Compliance Status</th>
+          <th>Diagnostic Evaluation</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- pH -->
+        <tr>
+          <td><strong class="text-white">pH Value</strong></td>
+          <td><span class="fs-6 fw-bold">{{ params.ph.value }}</span></td>
+          <td>{{ params.ph.range }}</td>
+          <td>
+            <span class="status-badge {% if params.ph.status == 'SAFE' %}safe{% else %}warning{% endif %}">
+              {{ params.ph.status }}
+            </span>
+          </td>
+          <td class="text-muted">{{ params.ph.message }}</td>
+        </tr>
+
+        <!-- TDS -->
+        <tr>
+          <td><strong class="text-white">Total Dissolved Solids (TDS)</strong></td>
+          <td><span class="fs-6 fw-bold">{{ params.tds.value }} ppm</span></td>
+          <td>{{ params.tds.range }}</td>
+          <td>
+            <span class="status-badge {% if params.tds.status == 'SAFE' %}safe{% else %}unsafe{% endif %}">
+              {{ params.tds.status }}
+            </span>
+          </td>
+          <td class="text-muted">{{ params.tds.message }}</td>
+        </tr>
+
+        <!-- Turbidity -->
+        <tr>
+          <td><strong class="text-white">Turbidity</strong></td>
+          <td><span class="fs-6 fw-bold">{{ params.turbidity.value }} NTU</span></td>
+          <td>{{ params.turbidity.range }}</td>
+          <td>
+            <span class="status-badge {% if params.turbidity.status == 'SAFE' %}safe{% else %}unsafe{% endif %}">
+              {{ params.turbidity.status }}
+            </span>
+          </td>
+          <td class="text-muted">{{ params.turbidity.message }}</td>
+        </tr>
+
+        <!-- Temperature -->
+        <tr>
+          <td><strong class="text-white">Water Temperature</strong></td>
+          <td><span class="fs-6 fw-bold">{{ params.temperature.value }} °C</span></td>
+          <td>{{ params.temperature.range }}</td>
+          <td>
+            <span class="status-badge {% if params.temperature.status == 'SAFE' %}safe{% else %}warning{% endif %}">
+              {{ params.temperature.status }}
+            </span>
+          </td>
+          <td class="text-muted">{{ params.temperature.message }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

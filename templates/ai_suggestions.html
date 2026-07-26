@@ -1,0 +1,79 @@
+{% extends "layout.html" %}
+
+{% block title %}AI Rule Engine Suggestions - Water Purity Tracker{% endblock %}
+
+{% block content %}
+<div class="page-header-block">
+  <div>
+    <h1 class="page-title"><i class="fas fa-robot me-2 text-cyan"></i> AI Rule Engine Treatment Advisor</h1>
+    <p class="page-subtitle">Automated Engineering Chemistry recommendations generated for hostel water tanks</p>
+  </div>
+</div>
+
+<div class="row g-4">
+  {% for d in diagnoses %}
+  <div class="col-12 col-md-6 col-xl-6">
+    <div class="glass-card h-100 d-flex flex-column justify-content-between p-4" style="border-left: 4px solid var(--color-cyan-glow);">
+      <div>
+        <div class="d-flex justify-content-between align-items-center mb-2">
+          <span class="status-badge {% if d.reading.Status == 'SAFE' %}safe{% else %}unsafe{% endif %}">
+            <i class="fas {% if d.reading.Status == 'SAFE' %}fa-check-circle{% else %}fa-triangle-exclamation{% endif %} me-1"></i>
+            {{ d.reading.Status }} (Score: {{ d.reading['Purity Score'] }}/100)
+          </span>
+          <span class="priority-chip {% if 'High' in d.diagnosis.priority %}high{% elif 'Medium' in d.diagnosis.priority %}medium{% else %}low{% endif %}">
+            {{ d.diagnosis.priority }}
+          </span>
+        </div>
+
+        <h5 class="fw-bold text-white mb-1">
+          {{ d.reading['Hostel Block'] }} &bull; <span class="text-cyan">{{ d.reading.Tank }}</span>
+        </h5>
+        <div class="text-muted small mb-3">
+          <i class="fas fa-calendar-alt me-1"></i> Tested on {{ d.reading.Date }} at {{ d.reading.Time }} by {{ d.reading.Collector }}
+        </div>
+
+        <!-- Chemistry Metrics Pills -->
+        <div class="d-flex flex-wrap gap-2 mb-3">
+          <span class="badge bg-dark bg-opacity-75 text-info border border-secondary border-opacity-25">
+            pH: <strong>{{ d.reading.pH }}</strong>
+          </span>
+          <span class="badge bg-dark bg-opacity-75 text-warning border border-secondary border-opacity-25">
+            TDS: <strong>{{ d.reading.TDS }} ppm</strong>
+          </span>
+          <span class="badge bg-dark bg-opacity-75 text-cyan border border-secondary border-opacity-25">
+            Turbidity: <strong>{{ d.reading.Turbidity }} NTU</strong>
+          </span>
+          <span class="badge bg-dark bg-opacity-75 text-light border border-secondary border-opacity-25">
+            Temp: <strong>{{ d.reading.Temperature }}°C</strong>
+          </span>
+        </div>
+
+        <h6 class="fw-bold text-light mb-2"><i class="fas fa-microchip me-2 text-cyan"></i> Recommended Treatment Action:</h6>
+        <p class="text-info fw-semibold mb-3">{{ d.diagnosis.summary }}</p>
+
+        {% if d.diagnosis.recommendations %}
+          <div class="bg-dark bg-opacity-50 p-3 rounded-3 mb-3 border border-secondary border-opacity-25">
+            {% for r in d.diagnosis.recommendations %}
+            <div class="mb-2 last-mb-0">
+              <div class="d-flex justify-content-between align-items-center">
+                <span class="fw-bold text-cyan small"><i class="fas fa-wrench me-1"></i> {{ r.action }}</span>
+                <span class="badge bg-danger bg-opacity-25 text-danger extra-small">{{ r.parameter }} Issue</span>
+              </div>
+              <p class="small text-muted mb-0 mt-1">{{ r.details }}</p>
+            </div>
+            {% endfor %}
+          </div>
+        {% endif %}
+      </div>
+
+      <div class="pt-3 border-top border-secondary border-opacity-25 d-flex justify-content-between align-items-center">
+        <span class="text-muted extra-small"><i class="fas fa-bullseye me-1"></i> Expected Improvement: {{ d.diagnosis.expected_improvement }}</span>
+        <button class="btn btn-sm btn-outline-cyan" onclick="showToast('Treatment protocol dispatched to maintenance team', 'success')">
+          <i class="fas fa-paper-plane me-1"></i> Dispatch Action
+        </button>
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+{% endblock %}

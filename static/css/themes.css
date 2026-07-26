@@ -1,0 +1,173 @@
+/* Theme & Background Styles */
+/* -------------------------------------------------------------
+   Water Purity Tracker - Dynamic Page Backgrounds (backgrounds.css)
+   Unique water-inspired animated backgrounds for each template
+   ------------------------------------------------------------- */
+
+/* Common Canvas / Layer Backdrop */
+.bg-animated-layer {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+/* 1. AUTHENTICATION BACKGROUND (Floating Water Bubbles & Wave) */
+body[data-bg="auth"] .bg-animated-layer {
+  background: radial-gradient(circle at 50% 20%, #0f2b48 0%, #061329 100%);
+}
+
+.bubble {
+  position: absolute;
+  bottom: -100px;
+  background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.4), rgba(56, 189, 248, 0.1));
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  animation: floatUp 12s infinite ease-in;
+}
+
+@keyframes floatUp {
+  0% { transform: translateY(0) scale(0.8); opacity: 0; }
+  50% { opacity: 0.6; }
+  100% { transform: translateY(-120vh) scale(1.2); opacity: 0; }
+}
+
+.svg-wave-bottom {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 140px;
+  fill: rgba(2, 132, 199, 0.15);
+  animation: waveMove 10s infinite linear alternate;
+}
+
+@keyframes waveMove {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-30px); }
+}
+
+/* 2. DASHBOARD BACKGROUND (Soft Gradient & Translucent Circles) */
+body[data-bg="dashboard"] .bg-animated-layer {
+  background: linear-gradient(135deg, #0b1329 0%, #0a1b38 50%, #08172c 100%);
+}
+
+.floating-circle {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(60px);
+  opacity: 0.25;
+  animation: pulseGlow 8s infinite alternate ease-in-out;
+}
+
+.circle-1 {
+  width: 400px;
+  height: 400px;
+  background: #0284c7;
+  top: -100px;
+  right: -100px;
+}
+
+.circle-2 {
+  width: 350px;
+  height: 350px;
+  background: #06b6d4;
+  bottom: -50px;
+  left: 10%;
+}
+
+@keyframes pulseGlow {
+  0% { transform: scale(1) translateY(0); opacity: 0.2; }
+  100% { transform: scale(1.15) translateY(-20px); opacity: 0.35; }
+}
+
+/* 3. ANALYTICS BACKGROUND (Gradient Mesh & Particle Lines) */
+body[data-bg="analytics"] .bg-animated-layer {
+  background: radial-gradient(circle at 80% 20%, #0d2847 0%, #091428 100%);
+}
+
+.mesh-grid-pattern {
+  position: absolute;
+  inset: 0;
+  background-image: 
+    linear-gradient(rgba(34, 211, 238, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(34, 211, 238, 0.05) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+
+/* 4. REPORTS BACKGROUND (Abstract Blue Geometric Shapes) */
+body[data-bg="reports"] .bg-animated-layer {
+  background: linear-gradient(180deg, #0b1329 0%, #0c1e3d 100%);
+}
+
+.geo-shape {
+  position: absolute;
+  border: 1px solid rgba(56, 189, 248, 0.12);
+  background: rgba(2, 132, 199, 0.03);
+  transform: rotate(45deg);
+  animation: rotateSlow 40s infinite linear;
+}
+
+.shape-1 { width: 300px; height: 300px; top: 10%; left: -80px; }
+.shape-2 { width: 450px; height: 450px; bottom: -100px; right: -100px; }
+
+@keyframes rotateSlow {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* 5. WATER TEST PAGE (Hexagonal Chemistry Lattice) */
+body[data-bg="water_test"] .bg-animated-layer {
+  background: #091325;
+}
+
+.hex-lattice {
+  position: absolute;
+  inset: 0;
+  opacity: 0.06;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='98' viewBox='0 0 56 98'%3E%3Cpath fill='%2322d3ee' d='M28 66L0 50V16L28 0l28 16v34L28 66zM28 98L0 82V48l28-16 28 16v34L28 98z'/%3E%3C/svg%3E");
+}
+
+/* 6. AI SUGGESTIONS PAGE (Futuristic AI Grid & Glowing Nodes) */
+body[data-bg="ai"] .bg-animated-layer {
+  background: radial-gradient(circle at 50% 50%, #061e38 0%, #070e1c 100%);
+}
+
+.ai-grid-lines {
+  position: absolute;
+  inset: 0;
+  background: 
+    radial-gradient(circle at 50% 50%, rgba(6, 182, 212, 0.12) 0%, transparent 60%),
+    linear-gradient(rgba(6, 182, 212, 0.04) 1px, transparent 1px);
+  background-size: 100% 100%, 30px 30px;
+}
+
+/* 7. ABOUT PAGE (Water Ripple Effect) */
+body[data-bg="about"] .bg-animated-layer {
+  background: #0b152d;
+}
+
+.ripple-circle {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border: 1px solid rgba(34, 211, 238, 0.2);
+  border-radius: 50%;
+  animation: rippleExpand 6s infinite ease-out;
+}
+
+.ripple-1 { width: 100px; height: 100px; animation-delay: 0s; }
+.ripple-2 { width: 250px; height: 250px; animation-delay: 2s; }
+.ripple-3 { width: 400px; height: 400px; animation-delay: 4s; }
+
+@keyframes rippleExpand {
+  0% { transform: translate(-50%, -50%) scale(0.2); opacity: 0.8; }
+  100% { transform: translate(-50%, -50%) scale(2.5); opacity: 0; }
+}
+
+/* 8. HELP PAGE (Simple Gradient & Floating Icons) */
+body[data-bg="help"] .bg-animated-layer {
+  background: linear-gradient(135deg, #091224 0%, #0b1a36 100%);
+}

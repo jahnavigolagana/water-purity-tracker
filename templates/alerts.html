@@ -1,0 +1,69 @@
+{% extends "layout.html" %}
+
+{% block title %}System Alerts - Water Purity Tracker{% endblock %}
+
+{% block content %}
+<div class="page-header-block">
+  <div>
+    <h1 class="page-title"><i class="fas fa-bell me-2 text-warning"></i> Automated Quality Alerts Log</h1>
+    <p class="page-subtitle">Real-time alerts automatically triggered by parameter threshold breaches</p>
+  </div>
+</div>
+
+<div class="glass-card">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h5 class="fw-bold text-white mb-0"><i class="fas fa-list me-2 text-cyan"></i> Active & Historical System Alerts</h5>
+    <span class="badge bg-danger bg-opacity-20 text-danger border border-danger border-opacity-25 px-3 py-1">Auto-Triggered</span>
+  </div>
+
+  <div class="glass-table-container">
+    <table class="glass-table">
+      <thead>
+        <tr>
+          <th>Timestamp</th>
+          <th>Alert Type</th>
+          <th>Hostel Block & Tank</th>
+          <th>Alert Message</th>
+          <th>Severity</th>
+          <th>Status</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for a in alerts %}
+        <tr>
+          <td class="text-nowrap small text-muted">{{ a.timestamp }}</td>
+          <td><strong class="text-white">{{ a.alert_type }}</strong></td>
+          <td>
+            <div class="fw-semibold text-light">{{ a.hostel_block }}</div>
+            <div class="extra-small text-muted">{{ a.tank }}</div>
+          </td>
+          <td style="max-width: 300px;">{{ a.message }}</td>
+          <td>
+            <span class="priority-chip {% if a.severity == 'High' %}high{% elif a.severity == 'Medium' %}medium{% else %}low{% endif %}">
+              {{ a.severity }}
+            </span>
+          </td>
+          <td>
+            <span class="status-badge {% if a.resolved %}safe{% else %}unsafe{% endif %}">
+              {% if a.resolved %}RESOLVED{% else %}UNRESOLVED{% endif %}
+            </span>
+          </td>
+          <td>
+            <button class="btn btn-sm {% if a.resolved %}btn-outline-secondary{% else %}btn-outline-success{% endif %}"
+                    onclick="toggleAlertResolved({{ a.id }}, this)">
+              <i class="fas {% if a.resolved %}fa-rotate-left{% else %}fa-check-double{% endif %} me-1"></i>
+              {% if a.resolved %}Reopen{% else %}Mark Resolved{% endif %}
+            </button>
+          </td>
+        </tr>
+        {% else %}
+        <tr>
+          <td colspan="7" class="text-center py-4 text-muted">No system alerts registered.</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

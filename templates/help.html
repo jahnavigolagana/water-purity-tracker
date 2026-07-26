@@ -1,0 +1,117 @@
+{% extends "layout.html" %}
+
+{% block title %}Help & Support - Water Purity Tracker{% endblock %}
+
+{% block content %}
+<div class="page-header-block">
+  <div>
+    <h1 class="page-title"><i class="fas fa-headset me-2 text-cyan"></i> Help & Documentation</h1>
+    <p class="page-subtitle">Frequently Asked Questions, Chemistry benchmarks, and Admin Support</p>
+  </div>
+</div>
+
+<div class="row g-4">
+  <!-- FAQs Column -->
+  <div class="col-12 col-lg-7">
+    <div class="glass-card p-4">
+      <h5 class="fw-bold text-white mb-3"><i class="fas fa-question-circle text-cyan me-2"></i> Frequently Asked Questions</h5>
+
+      <div class="accordion accordion-flush" id="faqAccordion">
+        <!-- FAQ 1 -->
+        <div class="accordion-item bg-transparent border-bottom border-secondary border-opacity-25">
+          <h2 class="accordion-header">
+            <button class="accordion-button collapsed bg-transparent text-white fw-semibold" type="button" data-bs-toggle="collapse" data-bs-target="#faq1">
+              How is the overall Water Purity Score (0-100) calculated?
+            </button>
+          </h2>
+          <div id="faq1" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+            <div class="accordion-body text-muted small">
+              The purity score uses a weighted mathematical algorithm evaluating deviation from WHO and Indian BIS (IS 10500) drinking standards: pH (30%), TDS (30%), Turbidity (25%), and Temperature (15%). Water is rated SAFE when the score is ≥ 75 and no critical threshold is breached.
+            </div>
+          </div>
+        </div>
+
+        <!-- FAQ 2 -->
+        <div class="accordion-item bg-transparent border-bottom border-secondary border-opacity-25">
+          <h2 class="accordion-header">
+            <button class="accordion-button collapsed bg-transparent text-white fw-semibold" type="button" data-bs-toggle="collapse" data-bs-target="#faq2">
+              What are the safe limits for hostel drinking water?
+            </button>
+          </h2>
+          <div id="faq2" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+            <div class="accordion-body text-muted small">
+              <ul>
+                <li><strong>pH Level:</strong> 6.5 to 8.5</li>
+                <li><strong>TDS (Total Dissolved Solids):</strong> ≤ 500 ppm</li>
+                <li><strong>Turbidity:</strong> ≤ 5.0 NTU</li>
+                <li><strong>Temperature:</strong> 20.0°C to 35.0°C</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- FAQ 3 -->
+        <div class="accordion-item bg-transparent border-bottom border-secondary border-opacity-25">
+          <h2 class="accordion-header">
+            <button class="accordion-button collapsed bg-transparent text-white fw-semibold" type="button" data-bs-toggle="collapse" data-bs-target="#faq3">
+              How does the Python Rule Engine generate purification advice?
+            </button>
+          </h2>
+          <div id="faq3" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+            <div class="accordion-body text-muted small">
+              The backend module <code>rules.py</code> evaluates entered parameters against chemical rule conditions. For example: High TDS (>500 ppm) triggers Reverse Osmosis (RO); Low pH (<6.5) triggers Calcite Neutralization; High Turbidity (>5 NTU) triggers Sand Filtration & UV Disinfection.
+            </div>
+          </div>
+        </div>
+
+        <!-- FAQ 4 -->
+        <div class="accordion-item bg-transparent">
+          <h2 class="accordion-header">
+            <button class="accordion-button collapsed bg-transparent text-white fw-semibold" type="button" data-bs-toggle="collapse" data-bs-target="#faq4">
+              Where are the water test logs stored?
+            </button>
+          </h2>
+          <div id="faq4" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+            <div class="accordion-body text-muted small">
+              All readings are automatically saved directly into <code>data/water_readings.csv</code> inside the backend folder. You can export or download the raw CSV anytime from the Dashboard or Reports section.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Feedback & Support Contact Form -->
+  <div class="col-12 col-lg-5">
+    <div class="glass-card p-4">
+      <h5 class="fw-bold text-white mb-3"><i class="fas fa-paper-plane text-info me-2"></i> Submit Feedback / Report Issue</h5>
+      <form onsubmit="event.preventDefault(); showToast('Feedback submitted to hostel administration!', 'success'); this.reset();">
+        <div class="mb-3">
+          <label class="glass-label">Your Name</label>
+          <input type="text" class="glass-input" required placeholder="Full Name">
+        </div>
+        <div class="mb-3">
+          <label class="glass-label">Email Address</label>
+          <input type="email" class="glass-input" required placeholder="user@hostel.edu">
+        </div>
+        <div class="mb-3">
+          <label class="glass-label">Category</label>
+          <select class="glass-select">
+            <option value="Water Quality Concern">Water Quality Concern</option>
+            <option value="Tank Maintenance Request">Tank Maintenance Request</option>
+            <option value="Bug Report">System Bug Report</option>
+            <option value="Feature Suggestion">Feature Suggestion</option>
+          </select>
+        </div>
+        <div class="mb-4">
+          <label class="glass-label">Message Details</label>
+          <textarea class="glass-input" rows="3" required placeholder="Describe your query or feedback..."></textarea>
+        </div>
+        <button type="submit" class="btn-ocean w-100 justify-content-center">
+          <i class="fas fa-paper-plane me-1"></i> Send Feedback
+        </button>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}
