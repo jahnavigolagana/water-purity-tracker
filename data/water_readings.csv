@@ -27,3 +27,4 @@ Date,Time,Hostel Block,Tank,Collector,pH,TDS,Temperature,Turbidity,Purity Score,
 2026-07-25,10:30,Block A - Boys,Overhead Tank 1,Ramesh Kumar,7.2,340.0,26.5,2.1,90,SAFE,Water Safe - No Treatment Required
 2026-07-26,10:30,Block C - Girls,Overhead Tank 1,Jahanvi ,4.3,34.0,15.9,2.1,56,UNSAFE,Neutralization Filter
 2026-07-25,10:30,Block A - Boys,Overhead Tank 1,Ramesh Kumar,1.7,642.0,10.7,14.0,12,UNSAFE,Reverse Osmosis & Neutralization Filter & Multi-Stage Sedimentation & Sand Filtration + UV Disinfection
+2026-07-25,10:30,Block A - Boys,Overhead Tank 1,Ramesh Kumar,1.4,507.0,40.5,10.4,12,UNSAFE,Reverse Osmosis & Neutralization Filter & Multi-Stage Sedimentation & Sand Filtration + UV Disinfection & Storage Tank Inspection & Cooling Shading
